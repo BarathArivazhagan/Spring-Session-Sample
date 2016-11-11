@@ -50,10 +50,10 @@ public class GemfireSessionConfiguration {
 	
 	private ServletContext servletContext;
 	
-	@Value("${woa.session.urlMappings:/login}")
+	@Value("${spring.session.urlMappings:/login}")
 	private String urlMappings;
 	
-	@Value("${woa.session.maxInactiveIntervalInSeconds:1800}")
+	@Value("${spring.session.maxInactiveIntervalInSeconds:1800}")
 	private int maxInactiveIntervalInSeconds;
 	
 	

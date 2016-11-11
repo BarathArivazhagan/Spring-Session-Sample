@@ -3,8 +3,10 @@ package com.barath.demo.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,11 +87,15 @@ public class TestSessionController {
 
 
 	@RequestMapping("/service")
-	public Object testService(){
+	public Object testService(HttpServletRequest request,@RequestHeader Map<String, String> headers,HttpServletResponse response){
+		headers.entrySet().stream().forEach(System.out::println);
 		String sessionId=getSessionToken();
-	
+		if(sessionId == null ){
+			sessionId=request.getSession().getId();
+		}
 		System.out.println("Testing the service with session id "+sessionId);
-		ExpiringSession session= sessionRep.getSession(sessionId);		
+		ExpiringSession session= sessionRep.getSession(sessionId);	
+		response.setHeader(HEADER_TOKEN, sessionId);
 		if(session !=null && !session.isExpired()){
 			return " Service is  processed and session is active ";
 		}

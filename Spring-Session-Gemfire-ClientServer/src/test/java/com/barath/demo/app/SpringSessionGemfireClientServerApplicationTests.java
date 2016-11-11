@@ -38,7 +38,8 @@ public class SpringSessionGemfireClientServerApplicationTests {
 	private static final String LOGIN_ENDPOINT="http://localhost:8083/APP/login";
 	private static final String TEST_SERVICE_ENDPOINT="http://localhost:8083/APP/service";
 	private static final String SESSION_TOKEN="x-auth-token";
-	private String sessionToken=null;
+	private String sessionToken;
+		
 		
 	
 
@@ -49,8 +50,8 @@ public class SpringSessionGemfireClientServerApplicationTests {
 	@Autowired(required=false)
 	private MockMvc mockMvc;
 	
-	@Autowired
-	private TestRestTemplate restTemplate;
+	@Autowired(required=false)
+	private RestTemplate restTemplate;
 	
 
 	@Before
@@ -58,54 +59,58 @@ public class SpringSessionGemfireClientServerApplicationTests {
 		if(mockMvc==null){
 			mockMvc=MockMvcBuilders.webAppContextSetup(webContext).build();
 		}
+		this.restTemplate= (restTemplate != null )?  this.restTemplate : new RestTemplate();
 	}
 	
-	@Test
-	public void performLogin() throws Exception{		
+	
+	public ResponseEntity<String> performLogin() throws Exception{		
 	
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LOGIN_ENDPOINT)
 		        .queryParam("emailId", "barath@test.com")
 		        .queryParam("password", "barath");
 		ResponseEntity<String> response=restTemplate.exchange(builder.build().toString(),HttpMethod.POST, null,String.class);
-		System.out.println("output "+response.getHeaders());
-		System.out.println("Session "+response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));
-		this.setSessionToken(response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));
+		System.out.println("output "+response.getHeaders());	
+		
+		return  response;
+	
 	}
 	
 	
-	@Test
-	public void testService(){
+	@Test	
+	public void testService() throws Exception{
 		
+		ResponseEntity<String> loginResponse=performLogin();
+		String sessionToken=loginResponse.getHeaders().getFirst(SESSION_TOKEN);
 		HttpHeaders headers=new HttpHeaders();		
-		System.out.println("TEST SERVICE "+this.getSessionToken());
-		headers.set(SESSION_TOKEN, this.getSessionToken());
+		System.out.println("TEST SERVICE "+sessionToken);
+		headers.set(SESSION_TOKEN, sessionToken);
 		HttpEntity<String> httpEntity=new HttpEntity<String>(headers);
 		ResponseEntity<String> response=restTemplate.exchange(TEST_SERVICE_ENDPOINT,HttpMethod.GET, httpEntity,String.class);
 		System.out.println("output "+response.getHeaders());
-		System.out.println("Session "+response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));		
-		assertEquals(this.getSessionToken(), response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));
+		HttpHeaders responseHeaders=response.getHeaders();		;
+		System.out.println("Session "+responseHeaders.getFirst(SESSION_TOKEN));	
+		System.out.println("Response output "+response.getBody());
+		assertEquals(sessionToken, responseHeaders.getFirst(SESSION_TOKEN));
 	}
 	
 	
-	@Test
-	public void testServiceFails(){		
+	//@Test
+	public void testServiceFails() throws Exception{		
 		HttpHeaders headers=new HttpHeaders();		
 		//headers.set(SESSION_TOKEN, this.getSessionToken());
+		ResponseEntity<String> loginResponse=performLogin();
+		String sessionToken=loginResponse.getHeaders().getFirst(SESSION_TOKEN);
 		HttpEntity<String> httpEntity=new HttpEntity<>(headers);
 		ResponseEntity<String> response=restTemplate.exchange(TEST_SERVICE_ENDPOINT,HttpMethod.GET, httpEntity,String.class);
 		System.out.println("output "+response.getHeaders());
-		System.out.println("Session "+response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));
-		assertNotEquals(this.getSessionToken(),response.getHeaders().getValuesAsList(SESSION_TOKEN).get(0));
+		HttpHeaders responseHeaders=response.getHeaders();
+		
+		System.out.println("Session "+responseHeaders.getFirst(SESSION_TOKEN));	
+	
+		assertNotEquals(sessionToken,responseHeaders.getFirst(SESSION_TOKEN));
 	}
 	
 	
-	public String getSessionToken() {
-		return sessionToken;
-	}
-
-	public void setSessionToken(String sessionToken) {
-		this.sessionToken = sessionToken;
-	}
 	
 
 }

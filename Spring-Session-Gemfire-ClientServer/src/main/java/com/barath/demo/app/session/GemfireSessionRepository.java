@@ -5,17 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.MapSession;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.events.SessionCreatedEvent;
 import org.springframework.session.events.SessionDeletedEvent;
 import org.springframework.session.events.SessionExpiredEvent;
-
 import com.gemstone.gemfire.cache.Region;
 import com.gemstone.gemfire.cache.client.ClientCache;
 import com.gemstone.gemfire.cache.query.FunctionDomainException;
@@ -28,8 +24,8 @@ import com.gemstone.gemfire.cache.query.TypeMismatchException;
 
 
 public class GemfireSessionRepository implements SessionRepository<ExpiringSession>{
+	
 	private static final String SESSION_REGION_NAME="session";
-	private final Map<String,ExpiringSession> sessionMap=new ConcurrentHashMap<String,ExpiringSession>();
 	private Region<String, ExpiringSession> sessionRegion; 
 	private ApplicationEventPublisher eventPublisher;
 
@@ -48,22 +44,21 @@ public class GemfireSessionRepository implements SessionRepository<ExpiringSessi
 
 	@Override
 	public ExpiringSession createSession() {
-		System.out.println("NEW SESSION IS CREATED =====>");
+		
 		ExpiringSession session=new MapSession();
 		session.setMaxInactiveIntervalInSeconds(this.maxInactiveIntervalInSeconds);
-		this.sessionMap.put(session.getId(), session);	
-		this.sessionRegion.put(session.getId(),session);
 		eventPublisher.publishEvent(new SessionCreatedEvent(this, session));
-		printSession(session);
+		System.out.println("NEW SESSION IS CREATED =====>"+session.getId());
+		//printSession(session);
 		return session;
 	}
 
 	@Override
 	public void save(ExpiringSession session) {
 		System.out.println("SAVING THE SESSION WITH SESSION ID "+session.getId());
-		printSession(session);
+		//printSession(session);
 		this.sessionRegion.put(session.getId(),session);
-		this.sessionMap.put(session.getId(), session);
+	
 	}
 
 	@Override
@@ -71,28 +66,27 @@ public class GemfireSessionRepository implements SessionRepository<ExpiringSessi
 		ExpiringSession session=null;
 		System.out.println("GETTING THE SESSION WITH SESSION ID"+id);
 		session=this.sessionRegion.get(id);
-		if(session != null){
-			if(session.isExpired()){
-				eventPublisher.publishEvent(new SessionExpiredEvent(this, session));
-				delete(session.getId());
-			}else{
-				session.setLastAccessedTime(System.currentTimeMillis());
-				//this.sessionMap.put(session.getId(), session);
-			}
-			
+		if(session == null){
+			return null;
 		}
+		if(session.isExpired()){
+				//eventPublisher.publishEvent(new SessionExpiredEvent(this, session));
+				delete(session.getId());
+				return null;
+		}
+					
 		/*testing purpose */
-		printSession(session);
+		//printSession(session);
 		return session;
 	}
 
 	@Override
 	public void delete(String id) {
 		
-		System.out.println("DELETING THE SESSION WITH SESSION ID===>"+id);
-		eventPublisher.publishEvent(new SessionDeletedEvent(this, getSession(id)));
+		System.out.println("DELETING THE SESSION WITH SESSION ID===>"+id);				
+		//eventPublisher.publishEvent(new SessionDeletedEvent(this, this.sessionRegion.get(id)));
 		this.sessionRegion.remove(id);
-		this.sessionMap.remove(id);
+		
 	}
 	
 	

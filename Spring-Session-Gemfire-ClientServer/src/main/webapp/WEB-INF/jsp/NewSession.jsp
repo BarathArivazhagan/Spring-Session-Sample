@@ -18,24 +18,85 @@
 
 $(document).ready(function(){
 	
-	$("#newsession").on("click",function(){
-		
+	
+	$("#newsession").on("click",function(){	
 		window.open(url);
 	});
 	
+	 $("#testService").on("click",function(){
+		
+		
+		$.ajax({
+			
+			url: "../../APP/service",
+			method: "GET",
+			beforeSend: function(jqXHR){
+				
+				jqXHR.setRequestHeader("x-auth-token",sessionId)
+			},
+			success: function(data,status){
+				if(data !=null){
+					console.log(data);
+									
+					$("#serviceResponse").html(data);
+					
+				}
+			},
+			error: function(jqXhr,errorMss){
+				console.log("error in test service");
+			}
+			
+		});
+		
+		
+	}); 
+	 
+	 $("#testAPP2").on("click",function(){
+			
+			
+			$.ajax({
+				
+				url: "../../APP/testAPP2",
+				method: "GET",
+				beforeSend: function(jqXHR){
+					console.log("Checking the session "+sessionId);
+					jqXHR.setRequestHeader("x-auth-token",sessionId)
+				},
+				success: function(data,status){
+					if(data !=null){
+						console.log(data);
+										
+						$("#serviceResponse").html(data);
+						
+					}
+				},
+				error: function(jqXhr,errorMss){
+					console.log("error in test service");
+				}
+				
+			});
+			
+			
+		}); 
+	
+	
+	 
+	 
 
 	
 });
+
+
 
 </script>
 </head>
 <body>
 <%
 HttpSessionManager sessionManager =
-(HttpSessionManager) request.getAttribute(HttpSessionManager.class.getName());
-
-System.out.print("Htp session Mangaer "+sessionManager);
-
+            (HttpSessionManager) request.getAttribute(HttpSessionManager.class.getName());
+     
+ 
+ 
 
 String contextPath = request.getContextPath();
 
@@ -46,54 +107,93 @@ Date creationDate=new Date(request.getSession().getCreationTime());
 Date lastAccessedDate=new Date(request.getSession().getLastAccessedTime());
 String userName=(String)request.getSession().getAttribute("USER_NAME");
 boolean isExpired=System.currentTimeMillis()-TimeUnit.SECONDS.toMillis(request.getSession().getMaxInactiveInterval()) >= request.getSession().getLastAccessedTime();
+String sessionToken=response.getHeader("x-auth-token"); 
 
+/* Map<String, String> map = new HashMap<String, String>();
+Enumeration headerNames = request.getHeaderNames();
+while (headerNames.hasMoreElements()) {
+	String key = (String) headerNames.nextElement();
+	String value = request.getHeader(key);
+	
+	map.put(key, value);
+}
+for(Map.Entry<String, String> entry:map.entrySet()){
+	System.out.println("HEADER KEY ==> "+entry.getKey()+ "   HEADER VALUE IS "+entry.getValue());
+}
+String sessionToken=map.get("x-auth-token"); */
 %>
 <script>
 
 var url="http://localhost:8083/APP/newSession";
+var sessionId="<%=sessionId%>";
+
+
 </script>
-<div>
-	<div>
-		Hello <%= userName%>
-	
-	</div>
-	<div>
-		Session ID is  <%= sessionId %>
-	</div>
-	<div>
-		Session Creation Date  is  <%= creationDate %>
-	</div>
-	<div>
-		Session Last Accessed Date  is  <%= lastAccessedDate %>
-	</div>
-	<div>
-	
-		Is Session Expired <%=isExpired %>
-	</div>
-<div>
-	<span>Click here to open new session </span>
-	<span><button id="newsession" value="NEW SESSION"> NEW SESSION</button></span>
 
+<div class="container">
+  
+ <div class="row rowTitle">
+  <div class="title">Welcome to Test Spring Session Strategy</div>
 </div>
-<div>
-
-
-<div>
-
-<span>Click here to close this session </span>
-	<span><a href="/APP/logout">LOG OUT</a></span>
-
+<div class="row rowTable">
+  <div class="col-sm-2 col-md-2"></div>
+  <div class="col-sm-8 col-md-8">
+  <table class="table-bordered" id="sessiontable">
+    <tbody>
+      <tr>
+        <td>User Name</td>
+        <td> <%= userName%></td>      
+      </tr>
+      <tr>
+        <td>Session ID</td>
+        <td> <%= sessionId %></td>
+        
+      </tr>
+      <tr>
+        <td>Session Creation Date</td>
+        <td><%= creationDate %></td>
+       
+      </tr>
+      <tr>
+        <td>Session Last Accessed Date </td>
+        <td><%= lastAccessedDate %></td>
+       
+      </tr>
+      <tr>
+        <td>Is Session Expired </td>
+        <td><%=isExpired %></td>
+       
+      </tr>
+      <tr>
+        <td>Click here to open new session</td>
+        <td><button id="newsession" class="btn btn-primary"> NEW SESSION</button></td>
+       
+      </tr>
+        <tr>
+        <td>Test Service </td>
+        <td><button id="testService" class="btn btn-primary">TEST SERVICE</button></td>
+       
+      </tr>
+      <tr>
+        <td>Test App2 </td>
+        <td><button id="testAPP2" class="btn btn-primary testApp2">TEST APP2</button></td>
+       
+      </tr>
+        <tr>
+        <td> Log out </td>
+        <td><a href="/APP/logout">LOG OUT</a></td>
+       
+      </tr>
+       <tr>
+        <td>Result </td>
+        <td><div id="serviceResponse" class="response"></div></td>
+       
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="col-sm-2 col-md-2"></div>
 </div>
-<div>
-		TestService  <span id="testService"> test</span>
-
-
-	</div>
-	<div id="serviceResponse">
-	
-	</div>
-
-
 </div>
 
 </body>

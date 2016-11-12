@@ -37,11 +37,13 @@ $(document).ready(function(){
 				jqXHR.setRequestHeader("x-auth-token",sessionId)
 			},
 			success: function(data,status){
-				if(data !=null){
+				if(data !=null && data.STATUS == "SUCCESS"){
 					console.log(data);
 									
-					$("#serviceResponse").html(data);
+					$("#serviceResponse").html(data.MESSAGE);
 					
+				}else if(data !=null && data.STATUS == "FAIL"){
+					$("body").html(data.MESSAGE);
 				}
 			},
 			error: function(jqXhr,errorMss){
@@ -65,11 +67,13 @@ $(document).ready(function(){
 					jqXHR.setRequestHeader("x-auth-token",sessionId)
 				},
 				success: function(data,status){
-					if(data !=null){
+					if(data !=null && data.STATUS == "SUCCESS"){
 						console.log(data);
 										
-						$("#serviceResponse").html(data);
+						$("#serviceResponse").html(data.MESSAGE);
 						
+					}else if(data !=null && data.STATUS == "FAIL"){
+						$("body").html(data.MESSAGE);
 					}
 				},
 				error: function(jqXhr,errorMss){
@@ -144,16 +148,16 @@ var sessionId="<%=sessionId%>";
     <tbody>
       <tr>
         <td>User Name</td>
-        <td> <%= userName%></td>      
+        <td id="userName"> <%= userName%></td>      
       </tr>
       <tr>
         <td>Session ID</td>
-        <td> <%= sessionId %></td>
+        <td id="sessionId"> <%= sessionId %></td>
         
       </tr>
       <tr>
         <td>Session Creation Date</td>
-        <td><%= creationDate %></td>
+        <td id="creationDate"><%= creationDate %></td>
        
       </tr>
       <tr>

@@ -2,6 +2,7 @@ package com.barath.demo.app;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +89,7 @@ public class TestSessionController {
 
 	@RequestMapping("/service")
 	public Object testService(HttpServletRequest request,@RequestHeader Map<String, String> headers,HttpServletResponse response){
+		Map<String,Object> responseMap=new HashMap<String,Object>(2);
 		headers.entrySet().stream().forEach(System.out::println);
 		String sessionId=getSessionToken();
 		if(sessionId == null ){
@@ -97,10 +99,20 @@ public class TestSessionController {
 		ExpiringSession session= sessionRep.getSession(sessionId);	
 		response.setHeader(HEADER_TOKEN, sessionId);
 		if(session !=null && !session.isExpired()){
-			return " Service is  processed and session is active ";
+			responseMap.put("STATUS", "SUCCESS");
+			responseMap.put("MESSAGE", "Service is  processed and session is active");
+			
+			//session.setAttribute("STATUS", "SERVICE PROCESSED ");
+		}else{
+			responseMap.put("STATUS", "FAIL");
+			responseMap.put("MESSAGE", "OOPS ! Session Expired . Login again <a href='/CITI'>here</a>");
 		}
 		
-		return "OOPS ! Session Expired . Login again <a href='/CITI'></a>";
+		//return "OOPS ! Session Expired . Login again <a href='/CITI'></a>";
+		//responseMap.put("STATUS", "FAIL");
+		//responseMap.put("MESSAGE", "OOPS ! Session Expired . Login again <a href='/CITI'></a>");
+		//return session;
+		return responseMap;
 		
 		
 	}

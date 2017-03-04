@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persitence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+
+<persistence-unit name="barath-session" transaction-type="RESOURCE_LOCAL">
+
+
+
+</persistence-unit>
+
+</persitence>

@@ -1,7 +1,6 @@
 package com.barath.app.controller;
 
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.lang.invoke.MethodHandles;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -9,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.HttpSessionManager;
@@ -20,19 +20,25 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class MainController {
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String HOME_VIEW="/html/login.html";
 	private static final String ERROR_VIEW="/html/error.html";
 	private static final String NEWSESSION_VIEW="/WEB-INF/jsp/NewSession.jsp";	
 	
 	static final String DEFAULT_SESSION_ALIAS_PARAM_NAME = "_s";
 	
-	@Autowired
-	private SessionRepository<ExpiringSession> sessionRep;
-	
+
+	private final SessionRepository<ExpiringSession> sessionRepository;
+
+	public MainController(SessionRepository<ExpiringSession> sessionRepository) {
+		this.sessionRepository = sessionRepository;
+	}
+
 	@RequestMapping(value="/")
 	public ModelAndView homePage(){	
 		
+		logger.info("home page is requested");
 		return new ModelAndView(HOME_VIEW);
 	}
 	

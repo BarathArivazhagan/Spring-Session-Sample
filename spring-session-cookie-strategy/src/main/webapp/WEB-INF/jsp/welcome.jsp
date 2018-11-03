@@ -40,7 +40,7 @@ HttpSessionManager sessionManager =
  String newSessionAlias = String.valueOf(System.currentTimeMillis());
 
 String contextPath = request.getContextPath();
-String alias=sessionManager.encodeURL("http://localhost:8083/CITI/newSession", newSessionAlias);
+String alias=sessionManager.encodeURL("http://localhost:8083/app/newSession", newSessionAlias);
 System.out.print("ALIAS IS "+alias);
     
  String url=alias;
@@ -92,7 +92,7 @@ var url="<%=url%>";
 <div>
 
 <span>Click here to close this session </span>
-	<span><a href="/CITI/logout">LOG OUT</a></span>
+	<span><a href="/app/logout">LOG OUT</a></span>
 
 </div>
 

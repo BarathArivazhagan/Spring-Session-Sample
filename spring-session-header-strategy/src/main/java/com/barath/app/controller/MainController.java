@@ -1,5 +1,6 @@
 package com.barath.app.controller;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -8,7 +9,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.session.ExpiringSession;
 import org.springframework.session.SessionRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,15 +22,23 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class MainController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String HOME_VIEW="/html/login.html";
 	private static final String ERROR_VIEW="/html/error.html";
 	private static final String NEWSESSION_VIEW="/WEB-INF/jsp/NewSession.jsp";
 	
 	private static final String HEADER_TOKEN="x-auth-token";
 	
-	@Autowired
-	private SessionRepository sessionRep;
+	private final SessionRepository<ExpiringSession> sessionRepository;	
 	
+	
+	public MainController(SessionRepository<ExpiringSession> sessionRepository) {
+		super();
+		this.sessionRepository = sessionRepository;
+	}
+
+
+
 	@RequestMapping(value="/")
 	public ModelAndView homePage(){		
 		
@@ -41,13 +53,13 @@ public class MainController {
 		
 		String token=request.getHeader(HEADER_TOKEN);
 		getHeadersInfo(request);
-		System.out.println("HEADER TOKEN IS "+token);
+		logger.info("HEADER TOKEN IS "+token);
 		String sessionId=request.getSession().getId();
-		System.out.println("SESSION ID IS "+sessionId);
+		logger.info("SESSION ID IS "+sessionId);
 		//sessionRep.delete(sessionId);
 		Collection<String> names=response.getHeaderNames();
 		for(String name:names){
-			System.out.println("RESPONSE HEADER NAMES ARE "+name);
+			logger.info("RESPONSE HEADER NAMES ARE "+name);
 		}
 		return new ModelAndView(NEWSESSION_VIEW);
 	}
@@ -67,7 +79,7 @@ public class MainController {
 			map.put(key, value);
 		}
 		for(Map.Entry<String, String> entry:map.entrySet()){
-			System.out.println("HEADER KEY ==> "+entry.getKey()+ "   HEADER VALUE IS "+entry.getValue());
+			logger.info("HEADER KEY ==> "+entry.getKey()+ "   HEADER VALUE IS "+entry.getValue());
 		}
 		return map;
 	  }

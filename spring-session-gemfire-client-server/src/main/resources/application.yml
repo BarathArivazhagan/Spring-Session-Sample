@@ -1,17 +1,13 @@
 server:
     port: 8083
-    context-path: /APP 
+    context-path: /app
    
 
 spring:
   application:
-    name: Spring-Session-Gemfire-ClientServer
+    name: spring-session-gemfire-client-server
   profiles:
     active: local
-  autoconfigure:
-    exclude:
-      - "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
-      - "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration"
   session:
       urlMappings: /*
       maxInactiveIntervalInSeconds: 60 
@@ -19,11 +15,7 @@ gemfire:
   locator:
       host: localhost
       port: 10334
-datasource:
-     connection:         
-         local: 
-            url: jdbc:hsqldb:mem:sessiondb
-            
+
 
 
   

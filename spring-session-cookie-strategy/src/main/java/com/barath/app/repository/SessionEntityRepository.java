@@ -1,9 +1,9 @@
 package com.barath.app.repository;
 
+import com.barath.app.entities.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.barath.app.entities.SessionEntity;
 
-public interface SessionEntityRepository extends JpaRepository<SessionEntity, String> {
+public interface SessionEntityRepository extends JpaRepository<Session, String> {
 
 }

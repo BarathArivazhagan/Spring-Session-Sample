@@ -155,12 +155,18 @@ public class User implements Serializable {
 
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
+
 	}
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"userId=" + userId +
+				", userName='" + userName + '\'' +
+				", userAge=" + userAge +
+				", userGender=" + userGender +
+				", userEmailId='" + userEmailId + '\'' +
+				", userPassword='" + userPassword + '\'' +
+				'}';
+	}
 }

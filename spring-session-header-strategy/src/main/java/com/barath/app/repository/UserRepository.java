@@ -7,6 +7,6 @@ import com.barath.app.entities.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	
-	public User findByUserEmailId(String emailId);
+	User findByUserEmailId(String emailId);
 	
 }

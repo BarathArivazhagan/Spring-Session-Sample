@@ -98,7 +98,7 @@ public class GemfireSessionConfiguration {
 	
 	private void registerFilter(ServletContext servletContext,boolean insertBeforeOtherFilters,String filterName,Filter filter){
 		FilterRegistration.Dynamic registration=servletContext.addFilter(filterName, filter);
-		Assert.notNull(registration, "Filter registration cannot be null");
+		Assert.notNull(registration, "filter registration cannot be null");
 		registration.setAsyncSupported(isAsyncSesssionSupported());
 		EnumSet<DispatcherType> dispatcherTypes=getSessionDispactherTypes();
 		registration.addMappingForUrlPatterns(dispatcherTypes, false,urlMappings.split(URL_MAPPING_SEPARATOR));

@@ -17,12 +17,12 @@
  <div class="wrapper">
     <form class="form-signin" action="/app/login" method="post" enctype="application/x-www-form-urlencoded">       
       <h2 class="form-signin-heading">Please login</h2>
-      <input type="text" class="form-control" name="emailId" placeholder="Email Address" required autofocus/>
-      <input type="password" class="form-control" name="password" placeholder="Password" required />      
-      <label class="checkbox">
+      <div class="custom-top"><input type="text" class="form-control" name="emailId" placeholder="Email Address" required autofocus/></div>
+      <div class="custom-top"><input type="password" class="form-control" name="password" placeholder="Password" required /></div>      
+      <label class="checkbox custom-top">
         <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
       </label>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>   
+      <div class="custom-top"><button class="btn btn-lg btn-primary btn-block" type="submit">Login</button> </div>  
     </form>
   </div>
 

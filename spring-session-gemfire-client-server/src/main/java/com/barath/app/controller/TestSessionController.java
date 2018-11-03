@@ -32,9 +32,8 @@ public class TestSessionController {
 	
 	private static final Logger logger=LoggerFactory.getLogger(TestSessionController.class);
 	private final ObjectMapper mapper=new ObjectMapper();
-	private static final String WELCOME_VIEW="/WEB-INF/jsp/welcome.jsp";	
 	private static final String HEADER_TOKEN="x-auth-token";
-	private static final String SESSION_EXPIRY_PAGE="sessionexpiry.jsp";
+	
 	
 
 	private final GemfireSessionRepository gemfireSessionRepository;

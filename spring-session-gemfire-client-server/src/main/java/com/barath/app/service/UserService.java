@@ -50,6 +50,10 @@ public class UserService {
 
 		return false;
 	}
+	
+	public List<User> getUsers(){
+		return this.userRepository.findAll();
+	}
 
 
 	@PostConstruct

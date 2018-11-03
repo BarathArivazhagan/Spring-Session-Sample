@@ -12,7 +12,7 @@
 <script>
  $(document).ready(function(){
 	 $("#login").on("click",function(){	
-			window.open("../../APP");
+			window.open("../../app");
 		});
  })
 

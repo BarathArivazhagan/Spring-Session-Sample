@@ -14,6 +14,7 @@
 <title>Welcome Page</title>
 <script type="text/javascript" src="./lib/jquery-1.12.4.js"> </script>
 <script type="text/javascript" src="./lib/bootstrap-3.3.6-dist/js/bootstrap.min.js"> </script>
+<script type="text/javascript" src="./lib/handlebars-v4.0.5.js"> </script>
 <link rel="stylesheet" type="text/css" href="./lib/bootstrap-3.3.6-dist/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="./css/login.css">
 <script type="text/javascript">
@@ -30,7 +31,7 @@ $(document).ready(function(){
 		
 		$.ajax({
 			
-			url: "../../APP/service",
+			url: "../../app/service",
 			method: "GET",
 			beforeSend: function(jqXHR){
 				
@@ -55,12 +56,12 @@ $(document).ready(function(){
 		
 	}); 
 	 
-	 $("#testAPP2").on("click",function(){
+	 $("#testapp2").on("click",function(){
 			
 			
 			$.ajax({
 				
-				url: "../../APP/testAPP2",
+				url: "../../app/testapp2",
 				method: "GET",
 				beforeSend: function(jqXHR){
 					console.log("Checking the session "+sessionId);
@@ -84,8 +85,37 @@ $(document).ready(function(){
 			
 			
 		}); 
-	
-	
+	 $("#viewUsers").on("click",function(){
+			
+			
+			$.ajax({
+				
+				url: "../../app/users",
+				method: "GET",
+				beforeSend: function(jqXHR){
+					console.log("Checking the session "+sessionId);
+					jqXHR.setRequestHeader("x-auth-token",sessionId)
+				},
+				success: function(data,status){
+					if(data !=null ){
+						console.log(data);
+						var source   = document.getElementById("users-template").innerHTML;
+						var template = Handlebars.compile(source);	
+						var html = template(data);
+						console.log(html);
+						$("#users").html(html);
+						
+					}
+				},
+				error: function(jqXhr,errorMss){
+					console.log("error in test service");
+				}
+				
+			});
+			
+			
+		}); 
+	 
 	 
 	 
 
@@ -130,7 +160,7 @@ String sessionToken=map.get("x-auth-token"); */
 %>
 <script>
 
-var url="http://localhost:8083/APP/newSession";
+var url="http://localhost:8083/app/newSession";
 var sessionId="<%=sessionId%>";
 
 
@@ -138,68 +168,99 @@ var sessionId="<%=sessionId%>";
 
 <div class="container">
   
- <div class="row rowTitle">
-  <div class="title">Welcome to Test Spring Session Strategy</div>
+	<div class="row rowTitle">
+	  <div class="title">Welcome to Test Spring Session Strategy</div>
+	</div>
+	<div class="row rowTable">
+	  <div class="col-sm-2 col-md-2"></div>
+	  <div class="col-sm-8 col-md-8">
+	  <table class="table-bordered" id="sessiontable">
+	    <tbody>
+	      <tr>
+	        <td>User Name</td>
+	        <td id="userName"> <%= userName%></td>      
+	      </tr>
+	      <tr>
+	        <td>Session ID</td>
+	        <td id="sessionId"> <%= sessionId %></td>
+	        
+	      </tr>
+	      <tr>
+	        <td>Session Creation Date</td>
+	        <td id="creationDate"><%= creationDate %></td>
+	       
+	      </tr>
+	      <tr>
+	        <td>Session Last Accessed Date </td>
+	        <td><%= lastAccessedDate %></td>
+	       
+	      </tr>
+	      <tr>
+	        <td>Is Session Expired </td>
+	        <td><%=isExpired %></td>
+	       
+	      </tr>
+	      <tr>
+	        <td>Click here to open new session</td>
+	        <td><button id="newsession" class="btn btn-primary"> NEW SESSION</button></td>
+	       
+	      </tr>
+	        <tr>
+	        <td>Test Service </td>
+	        <td><button id="testService" class="btn btn-primary">TEST SERVICE</button></td>
+	       
+	      </tr>
+	      <tr>
+	        <td>Test App2 </td>
+	        <td><button id="testapp2" class="btn btn-primary testApp2">TEST app2</button></td>
+	       
+	      </tr>
+	        <tr>
+	        <td> Log out </td>
+	        <td><a href="/app/logout">LOG OUT</a></td>
+	       
+	      </tr>
+	       <tr>
+	        <td>Result </td>
+	        <td><div id="serviceResponse" class="response"></div></td>
+	       
+	      </tr>
+	    </tbody>
+	  </table>
+	  </div>
+	  <div class="col-sm-2 col-md-2"></div>
+	</div>
+	<div class="row row-users">
+		  <button id="viewUsers" class="btn btn-lg btn-primary btn-block" >View Users</button>  
+		  <div id="users"> 
+		  </div>
+	</div>
 </div>
-<div class="row rowTable">
-  <div class="col-sm-2 col-md-2"></div>
-  <div class="col-sm-8 col-md-8">
-  <table class="table-bordered" id="sessiontable">
-    <tbody>
+
+</body>
+<script id="users-template" type="text/x-handlebars-template">
+ <h2>Users</h2>      
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td>User Name</td>
-        <td id="userName"> <%= userName%></td>      
+        <th>User ID</th>
+        <th>User Name</th>
+        <th>Age</th>
+		<th>Gender</th>
+		<th>Email</th>
       </tr>
+    </thead>
+    <tbody
+	{{#each this}}
       <tr>
-        <td>Session ID</td>
-        <td id="sessionId"> <%= sessionId %></td>
-        
-      </tr>
-      <tr>
-        <td>Session Creation Date</td>
-        <td id="creationDate"><%= creationDate %></td>
-       
-      </tr>
-      <tr>
-        <td>Session Last Accessed Date </td>
-        <td><%= lastAccessedDate %></td>
-       
-      </tr>
-      <tr>
-        <td>Is Session Expired </td>
-        <td><%=isExpired %></td>
-       
-      </tr>
-      <tr>
-        <td>Click here to open new session</td>
-        <td><button id="newsession" class="btn btn-primary"> NEW SESSION</button></td>
-       
-      </tr>
-        <tr>
-        <td>Test Service </td>
-        <td><button id="testService" class="btn btn-primary">TEST SERVICE</button></td>
-       
-      </tr>
-      <tr>
-        <td>Test App2 </td>
-        <td><button id="testAPP2" class="btn btn-primary testApp2">TEST APP2</button></td>
-       
-      </tr>
-        <tr>
-        <td> Log out </td>
-        <td><a href="/APP/logout">LOG OUT</a></td>
-       
-      </tr>
-       <tr>
-        <td>Result </td>
-        <td><div id="serviceResponse" class="response"></div></td>
-       
-      </tr>
+        <td>{{this.userId}}</td>
+        <td>{{this.userName}}</td>
+        <td>{{this.userAge}}</td>
+ 		<td>{{this.userGender}}</td>
+ 		<td>{{this.userEmailId}}</td>
+      </tr>  
+	{{/each}}   
     </tbody>
   </table>
-  </div>
-  <div class="col-sm-2 col-md-2"></div>
-</div>
-</div>
-</body>
+</script>
 </html>

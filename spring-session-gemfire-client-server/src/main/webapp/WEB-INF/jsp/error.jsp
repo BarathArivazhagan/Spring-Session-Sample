@@ -18,7 +18,7 @@ Sorry something went wrong ..Try logging in again
 <div>
 <span>CLick below for LOGIN</span>
 </div>
-<div><a href="/APP/">LOGIN</a>
+<div><a href="/app/">LOGIN</a>
 </div>
 
 </body>

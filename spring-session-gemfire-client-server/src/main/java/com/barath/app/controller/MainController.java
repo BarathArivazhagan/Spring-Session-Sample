@@ -33,7 +33,7 @@ public class MainController {
 	private static final Logger logger=LoggerFactory.getLogger(MainController.class);
 	private static final String HOME_VIEW="/html/login.html";
 	private static final String ERROR_VIEW="/html/error.html";
-	private static final String NEWSESSION_VIEW="/WEB-INF/jsp/NewSession.jsp";	
+	private static final String NEWSESSION_VIEW="/WEB-INF/jsp/newsession.jsp";	
 	private static final String HEADER_TOKEN="x-auth-token";
 	private static final String WELCOME_VIEW="/WEB-INF/jsp/welcome.jsp";	
 	private static final String LOGOUT_VIEW="/html/logout.html";

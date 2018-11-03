@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnableGemfireHttpSession(maxInactiveIntervalInSeconds=60)
-public class Application {
+public class Application extends ServletInitializer{
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

@@ -1,8 +1,11 @@
 
-@import "bourbon";
 
 body {
 	background: #eee !important;	
+}
+
+.custom-top {
+	padding-top: 10%;
 }
 
 .wrapper {	

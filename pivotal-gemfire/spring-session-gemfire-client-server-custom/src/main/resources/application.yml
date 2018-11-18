@@ -1,0 +1,22 @@
+server:
+    port: 8082
+    servlet:
+       context-path: /app
+   
+
+spring:
+  application:
+    name: spring-session-gemfire-client-server
+  session:
+      urlMappings: /*
+      maxInactiveIntervalInSeconds: 60 
+gemfire:
+  locator:
+      host: localhost
+      port: 10334
+  session:
+    region: http-gemfire-sessions
+
+
+
+  

@@ -1,8 +1,9 @@
 package com.barath.app;
 
-import com.barath.app.session.EnableGemfireHttpSession;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.barath.app.session.EnableGemfireHttpSession;
 
 @SpringBootApplication
 @EnableGemfireHttpSession(maxInactiveIntervalInSeconds=60)

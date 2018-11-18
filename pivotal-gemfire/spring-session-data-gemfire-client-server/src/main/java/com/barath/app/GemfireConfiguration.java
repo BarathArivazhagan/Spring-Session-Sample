@@ -1,16 +1,28 @@
 package com.barath.app;
 
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.gemfire.client.ClientCacheFactoryBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.gemfire.client.PoolFactoryBean;
 import org.springframework.data.gemfire.config.xml.GemfireConstants;
 import org.springframework.data.gemfire.support.ConnectionEndpoint;
 
+
+/**
+ * 
+ * This is custom implementation class if other than default
+ * gemfire pool is required.
+ * 
+ * Also @see AddPoolsConfiguration
+ * 		@see ClientConfigurerConfiguration
+ * 
+ * @author barath
+ *
+ */
+@Profile("custom")
 @Configuration
 public class GemfireConfiguration {
 	
@@ -32,23 +44,8 @@ public class GemfireConfiguration {
     }
 	
 
-    public  Properties gemfireProperties() {
-      Properties gemfireProperties = new Properties();
-      gemfireProperties.setProperty("log-level", logLevel());
-      return gemfireProperties;
-    }
+  
 
-    public String logLevel() {
-      return System.getProperty("gemfire.log-level", "config");
-    }
-
-    @Bean
-    public ClientCacheFactoryBean gemfireCache() {
-    	
-      ClientCacheFactoryBean gemfireCache = new ClientCacheFactoryBean();
-      gemfireCache.setClose(true);
-      gemfireCache.setProperties(gemfireProperties());
-      return gemfireCache;
-    }
+  
 
 }

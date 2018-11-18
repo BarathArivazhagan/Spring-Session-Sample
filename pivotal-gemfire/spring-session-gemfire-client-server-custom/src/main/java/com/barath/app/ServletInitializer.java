@@ -2,9 +2,7 @@ package com.barath.app;
 
 import org.apache.tomcat.util.http.LegacyCookieProcessor;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -17,7 +15,8 @@ public class ServletInitializer extends SpringBootServletInitializer{
 		return application.sources(Application.class);
 	}
 	
-	@Bean
+	/**	 enable below for lower versions
+	 @Bean
 	public EmbeddedServletContainerCustomizer customizer() {
 	    return container -> {
 	        if (container instanceof TomcatEmbeddedServletContainerFactory) {
@@ -25,7 +24,7 @@ public class ServletInitializer extends SpringBootServletInitializer{
 	            tomcat.addContextCustomizers(context -> context.setCookieProcessor(new LegacyCookieProcessor()));
 	        }
 	    };
-	}
+	} **/
 	
 	
 	@Bean

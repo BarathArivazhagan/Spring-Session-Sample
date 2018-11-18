@@ -36,7 +36,7 @@ public class UserService {
 	
 	
 	public List<User> addUsers(List<User> users){
-		return this.userRepository.save(users);
+		return this.userRepository.saveAll(users);
 	}
 	
 	public boolean authenticateLogin(String emailId,String password,HttpServletRequest request){

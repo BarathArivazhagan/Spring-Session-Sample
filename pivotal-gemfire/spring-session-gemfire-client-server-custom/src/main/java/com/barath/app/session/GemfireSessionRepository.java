@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.geode.cache.Region;
+import org.apache.geode.cache.client.ClientCache;
+import org.apache.geode.cache.query.FunctionDomainException;
+import org.apache.geode.cache.query.NameResolutionException;
+import org.apache.geode.cache.query.Query;
+import org.apache.geode.cache.query.QueryInvocationTargetException;
+import org.apache.geode.cache.query.QueryService;
+import org.apache.geode.cache.query.SelectResults;
+import org.apache.geode.cache.query.TypeMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,17 +21,15 @@ import org.springframework.session.MapSession;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.events.SessionCreatedEvent;
 
-import com.gemstone.gemfire.cache.Region;
-import com.gemstone.gemfire.cache.client.ClientCache;
-import com.gemstone.gemfire.cache.query.FunctionDomainException;
-import com.gemstone.gemfire.cache.query.NameResolutionException;
-import com.gemstone.gemfire.cache.query.Query;
-import com.gemstone.gemfire.cache.query.QueryInvocationTargetException;
-import com.gemstone.gemfire.cache.query.QueryService;
-import com.gemstone.gemfire.cache.query.SelectResults;
-import com.gemstone.gemfire.cache.query.TypeMismatchException;
 
 
+/**
+ * This is custom implementation of gemfire repository with gemfire session.
+ * 
+ *  
+ * @author barath
+ *
+ */
 public class GemfireSessionRepository implements SessionRepository<ExpiringSession>{
 	
 	private static final Logger logger=LoggerFactory.getLogger(GemfireSessionRepository.class);
@@ -108,6 +115,7 @@ public class GemfireSessionRepository implements SessionRepository<ExpiringSessi
 		
 		QueryService queryService = this.clientCache.getQueryService();	
 		Query query = queryService.newQuery(SELECT_QUERYSTRING);			
+		@SuppressWarnings("unchecked")
 		SelectResults<Object> results = (SelectResults<Object>)query.execute();
 		logger.info("Results "+results);
 		logger.info("SIZE "+results.size());	

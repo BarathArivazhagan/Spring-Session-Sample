@@ -5,9 +5,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.gemfire.config.annotation.ClientCacheApplication;
+import org.springframework.data.gemfire.config.annotation.EnablePool;
+import org.springframework.data.gemfire.config.xml.GemfireConstants;
 import org.springframework.session.Session;
 import org.springframework.session.data.gemfire.config.annotation.web.http.EnableGemFireHttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@EnableGemFireHttpSession(maxInactiveIntervalInSeconds=10, regionName="gemfire-sessions")
+@ClientCacheApplication(name="client-cache")
+@EnableGemFireHttpSession(regionName="gemfire-http-sessions", maxInactiveIntervalInSeconds= 10, clientRegionShortcut = ClientRegionShortcut.PROXY)
+@EnablePool(name=GemfireConstants.DEFAULT_GEMFIRE_POOL_NAME,
+locatorsString= "localhost[10334]"
+,subscriptionEnabled= true)
 @RestController
 public class Application {
 

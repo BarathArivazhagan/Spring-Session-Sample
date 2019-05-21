@@ -24,7 +24,7 @@ public class SessionEventListener implements HttpSessionListener {
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
 		
-		logger.info("WOASESSIONCREATIONEVENT ");
+		logger.info("SESSION CREATION EVENT ");
 		
 	}
 
@@ -34,7 +34,7 @@ public class SessionEventListener implements HttpSessionListener {
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		
-		logger.info("WOASESSIONCREATIONEVENT ");
+		logger.info("SESSION DESTROYED EVENT ");
 	}
 
 

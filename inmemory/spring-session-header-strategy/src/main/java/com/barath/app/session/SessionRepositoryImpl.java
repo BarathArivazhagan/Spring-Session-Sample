@@ -34,16 +34,17 @@ public class SessionRepositoryImpl implements SessionRepository<ExpiringSession>
 
 	@Override
 	public ExpiringSession createSession() {
-		logger.info("NEW SESSION IS CREATED =====>");
+		
 		ExpiringSession session=new MapSession();
 		session.setMaxInactiveIntervalInSeconds(this.maxInactiveIntervalInSeconds);
-		this.sessionMap.put(session.getId(), session);		
+		this.sessionMap.put(session.getId(), session);
+		logger.info("NEW SESSION IS CREATED WITH SESSION ID  =====> {}",session.getId());
 		return session;
 	}
 
 	@Override
 	public void save(ExpiringSession session) {
-		logger.info("SAVING THE SESSION WITH SESSION ID "+session.getId());
+		logger.info("SAVING THE SESSION WITH SESSION ID {}",session.getId());
 		sessionRepository.save(convertToSessionEntity(session));
 		this.sessionMap.put(session.getId(), session);
 	}
@@ -65,7 +66,7 @@ public class SessionRepositoryImpl implements SessionRepository<ExpiringSession>
 	@Override
 	public void delete(String id) {
 		
-		logger.info("DELETING THE SESSION WITH SESSION ID===>");
+		logger.info("DELETING THE SESSION WITH SESSION ID===> {}",id);
 		Assert.notNull(sessionRepository,"Session Repository cannot be null");
 		sessionRepository.delete(id);
 		this.sessionMap.remove(id);
